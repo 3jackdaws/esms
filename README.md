@@ -5,12 +5,14 @@ Send and Receive SMS and MMS messages with only an email address.
 Many US cell carriers implement a way to send SMS and MMS messages to their subscribers by sending an email to a carrier specific email address.  For example, if you send the text `Hello World` to `1234567890@vtext.com` from `you@example.com` if the phone number `1234567890` corresponds to a Verizon subscriber, they will receive the text "Hello World" and it will be from `you@example.com`.  Each carrier has a different email address you must send messages to, but the basics are the same. 
 
 # Features
-|  Feature | Implimented |
-| -------- | ----------- |
-| Send SMS Messages | YES  | 
-| Send Pictures via MMS | YES |
-| Receive SMS Messages | Planned |
-| Wait for a message from a specific number | Planned |
+|  Feature | Implemented (Sync) | Implemented (Async) | 
+| -------- | ----------- | ------- |
+| Send SMS Messages | YES  | PLANNED |
+| Send Pictures via MMS | YES | PLANNED |
+| Receive SMS Messages | TECHNICALLY | PLANNED |
+| Wait for a message from a specific number | POORLY | PLANNED | 
+| Get all messages | SURPRISINGLY, NO, BUT PLANNED | PLANNED
+| Event based message handling | WON'T HAPPEN | PLANNED
 
 
 
@@ -20,23 +22,46 @@ Many US cell carriers implement a way to send SMS and MMS messages to their subs
 ```python
 from esms import Number, SMSSender
 
-sender = SMSSender(
+client = SMSSender(
     host="mail.example.com",
     port="587"
 )
 
-sender.login("test@example.com", "password")
+client.login("test@example.com", "password")
 
 # Endpoints depend on carrier so you must specify
 number = Number("9715556666", "verizon")
 
-sender.send_sms(number, "Hello, World!")
+client.send_sms(number, "Hello, World!")
 
 with open("./picture.jpg", "rb") as picture:
-    sender.send_mms(
+    client.send_mms(
         number, 
         file_bytes=picture.read()
     )
+```
+
+### Receive SMS from a specific Number
+```python
+from esms import SMSReceiver, Message, Number
+
+client = SMSReceiver(
+    host="mail.example.com",
+    port="587"
+)
+
+client.login("test@example.com", "password")
+
+# Endpoints depend on carrier so you must specify
+number = Number("9715556666", "verizon")
+
+# Get all messages from a number
+messages = client.get_messages_from(number)  # type: [Messages]
+
+# OR
+
+# wait for a message from [number] for up to 60 seconds, poll every 5 seconds
+messages = client.await_messages_from(number, timeout=60, poll=5)
 ```
 
 # Bugs & Issues
