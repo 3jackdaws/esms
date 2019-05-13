@@ -21,12 +21,12 @@ def test_number():
     TEST_CARRIER = os.environ.get("TEST_CARRIER")
     return Number(TEST_NUMBER, TEST_CARRIER)
 
-# def test_send_message(sender: SMSSender):
-#
-#     sender.send_sms(
-#         "Testing 1 2 3",
-#         test_number
-#     )
+def test_send_message(sender: SMSSender):
+
+    sender.send_sms(
+        "Testing 1 2 3",
+        test_number
+    )
 
 def test_send_picture(sender:SMSSender, test_number:Number):
     PICTURE_PATH = "./tests/resources/doge.jpg"
