@@ -6,7 +6,7 @@ except:
     long_description = ""
 
 setup(
-    name='Email SMS Gateway',
+    name='esms',
     version='0.0.1',
     description='Send SMS via carrier specific email gateways',
     long_description=long_description,

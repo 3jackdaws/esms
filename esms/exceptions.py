@@ -1,0 +1,2 @@
+class UnsupportedCarrier(Exception): pass
+
